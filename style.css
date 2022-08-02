@@ -1,0 +1,80 @@
+/* NOTE *是什么意思？ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    font-family: Arial;
+}
+
+body {
+    background-color: #333333;
+    /* NOTE body加上display:flex后，面板宽度不再是视口宽度，而被内容撑开 
+    其实grid布局是指内部布局 容器本身默认block 所以跟随视口宽度？？？ */
+    display: flex;
+    /* 面板水平居中 */
+    justify-content: center;
+    /* NOTE 面板垂直居中 除了align-items还需要height:100vh 为什么？ */
+    align-items: center;
+    height: 100vh;
+    /* NOTE 为什么margin:0px能消除滚动条？ */
+    margin: 0px;
+    /* 设置字体大小 */
+    font-size: 7.5vmin;
+}
+
+#game-board {
+    /* NOTE grid宽度跟随适口 高度被内容撑开？？？不然为什么面板不是正方形 */
+    /* grid布局 */
+    display: grid;
+    /* 4行 每行高度为20vmin */
+    grid-template-rows: repeat(var(--grid-size), var(--cell-size));
+    /* 4列 每列宽度为20vmin */
+    grid-template-columns: repeat(var(--grid-size), var(--cell-size));
+    background-color: #cccccc;
+    /* 网格间距2vmin */
+    gap: var(--cell-gap);
+    /* 面板边框圆角半径为1vmin */
+    border-radius: 1vmin;
+    /* 网格距离面板边框2vmin */
+    padding: var(--cell-gap);
+    /* NOTE 为了后续tile的移动：面板设置为relative，tile设置为absolute */
+    position: relative;
+}
+
+.cell {
+    background-color: #aaaaaa;
+    /* 网格边框圆角半径为1vmin */
+    border-radius: 1vmin;
+}
+
+.tile {
+    --background-lightness:80%;
+    --text-lightness:20%;
+    /* 脱离文档流 */
+    position: absolute;
+    /*NOTE display:flex 和grid都只控制内部布局？ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: var(--cell-size);
+    height: var(--cell-size);
+    background-color: #fd0001;
+    border-radius: 1vmin;
+    /* NOTE +有空格和没空格大不同！ */
+    top: calc(var(--y) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
+    left: calc(var(--x) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
+    font-weight:bold;
+    background-color: hsl(200, 50%, var(--background-lightness));
+    color: hsl(200, 25%, var(--text-lightness));
+    /* TODO 复习动画 */
+    animation: show 200ms ease-in-out;
+    transition: 100ms ease-in-out;
+}
+
+@keyframes show {
+    0% {
+        opacity: .5;
+        transform: scale(0);
+    }
+}
